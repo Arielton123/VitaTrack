@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="VitaTrack 2.0 — acompanhe hábitos, hidratação, sono, atividade e bem-estar.">
+  <meta name="theme-color" content="#07111f">
+  <title>VitaTrack 2.0 — Hábitos Saudáveis</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+  <header class="topbar">
+    <a href="#" class="brand" data-screen="home" aria-label="VitaTrack - Início">
+      <span class="logo-icon">
+        <img src="favicon.svg" alt="">
+      </span>
+      <span class="brand-copy">
+        <strong>VitaTrack</strong>
+        <small>Hábitos saudáveis</small>
+      </span>
+    </a>
+
+    <nav class="primary-nav" aria-label="Navegação principal">
+      <button class="nav-link active" type="button" data-screen="home">Início</button>
+      <button class="nav-link" type="button" data-screen="calculator">Calculadora</button>
+      <button class="nav-link" type="button" data-screen="about">Sobre</button>
+    </nav>
+
+    <div class="header-actions">
+      <div class="tools-menu">
+        <button id="toolsButton" class="header-action" type="button" aria-expanded="false" aria-controls="toolsDropdown">
+          Ferramentas
+          <span class="chevron">⌄</span>
+        </button>
+        <div id="toolsDropdown" class="tools-dropdown">
+          <button type="button" data-screen="habits">
+            <span>Hábitos</span><small>Checklist diário</small>
+          </button>
+          <button type="button" data-screen="stats">
+            <span>Estatísticas</span><small>Seu progresso</small>
+          </button>
+          <button type="button" data-screen="goals">
+            <span>Metas</span><small>Objetivos pessoais</small>
+          </button>
+          <button type="button" data-screen="history">
+            <span>Histórico</span><small>Registros anteriores</small>
+          </button>
+        </div>
+      </div>
+
+      <button id="settingsButton" class="icon-button" type="button" aria-label="Configurações" title="Configurações">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 8.2a3.8 3.8 0 1 0 0 7.6 3.8 3.8 0 0 0 0-7.6Z"/>
+          <path d="M19.4 13.5a7.9 7.9 0 0 0 .1-1.5 7.9 7.9 0 0 0-.1-1.5l2-1.5-2-3.4-2.4 1a8.2 8.2 0 0 0-2.5-1.5L14.2 2h-4.4L9.5 5.1A8.2 8.2 0 0 0 7 6.6l-2.4-1-2 3.4 2 1.5a7.9 7.9 0 0 0-.1 1.5 7.9 7.9 0 0 0 .1 1.5l-2 1.5 2 3.4 2.4-1a8.2 8.2 0 0 0 2.5 1.5l.3 3.1h4.4l.3-3.1a8.2 8.2 0 0 0 2.5-1.5l2.4 1 2-3.4-2-1.5Z"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="app-main">
+    <!-- INÍCIO -->
+    <section id="screen-home" class="screen active">
+      <div class="page-head">
+        <div>
+          <p class="eyebrow">PAINEL DIÁRIO</p>
+          <h1>Olá, <span id="homeName">Visitante</span>.</h1>
+          <p id="homeDate" class="muted">Hoje</p>
+        </div>
+        <div class="streak-pill">
+          <span class="streak-dot"></span>
+          <span><strong id="homeStreak">0</strong> dias de sequência</span>
+        </div>
+      </div>
+
+      <div class="hero-grid">
+        <article class="card score-card">
+          <div class="score-ring" id="homeScoreRing" style="--progress: 0deg;">
+            <div class="score-ring-inner">
+              <strong id="homeScore">0%</strong>
+              <span>consistência</span>
+            </div>
+          </div>
+          <div class="score-copy">
+            <span class="card-kicker">HOJE</span>
+            <h2>Seu ritmo diário</h2>
+            <p id="scoreMessage">Comece registrando seus hábitos de hoje.</p>
+            <button class="btn btn-primary" type="button" data-screen="calculator">Registrar hoje</button>
+          </div>
+        </article>
+
+        <article class="card summary-card">
+          <div class="card-title-row">
+            <div>
+              <span class="card-kicker">RESUMO</span>
+              <h2>Indicadores de hoje</h2>
+            </div>
+            <button class="text-btn" type="button" data-screen="stats">Ver tudo</button>
+          </div>
+          <div class="metric-grid">
+            <div class="metric">
+              <span class="metric-icon water-icon">H₂O</span>
+              <div>
+                <strong id="homeWater">0 L</strong>
+                <span>de <b id="homeWaterGoal">2 L</b></span>
+              </div>
+            </div>
+            <div class="metric">
+              <span class="metric-icon sleep-icon">SONO</span>
+              <div>
+                <strong id="homeSleep">0 h</strong>
+                <span>meta <b id="homeSleepGoal">8 h</b></span>
+              </div>
+            </div>
+            <div class="metric">
+              <span class="metric-icon activity-icon">ATV</span>
+              <div>
+                <strong id="homeActivity">0 min</strong>
+                <span>meta <b id="homeActivityGoal">30 min</b></span>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div class="section-heading">
+        <div>
+          <span class="card-kicker">ROTINA</span>
+          <h2>Hábitos de hoje</h2>
+        </div>
+        <button class="text-btn" type="button" data-screen="habits">Gerenciar hábitos</button>
+      </div>
+      <div id="homeHabits" class="habit-grid"></div>
+
+      <div class="dashboard-grid">
+        <article class="card chart-card">
+          <div class="card-title-row">
+            <div>
+              <span class="card-kicker">ÚLTIMOS 7 DIAS</span>
+              <h2>Consistência</h2>
+            </div>
+            <button class="text-btn" type="button" data-screen="stats">Estatísticas</button>
+          </div>
+          <div id="homeWeeklyChart" class="bar-chart"></div>
+        </article>
+
+        <article class="card achievement-card">
+          <div class="card-title-row">
+            <div>
+              <span class="card-kicker">PROGRESSO</span>
+              <h2>Conquistas</h2>
+            </div>
+          </div>
+          <div id="achievementList" class="achievement-list"></div>
+        </article>
+      </div>
+    </section>
+
+    <!-- CALCULADORA -->
+    <section id="screen-calculator" class="screen">
+      <div class="page-head">
+        <div>
+          <p class="eyebrow">REGISTRO DIÁRIO</p>
+          <h1>Calculadora</h1>
+          <p class="muted">Registre seus dados e acompanhe seu progresso em tempo real.</p>
+        </div>
+      </div>
+
+      <div class="calculator-layout">
+        <article class="card form-card">
+          <div class="card-title-row">
+            <div>
+              <span class="card-kicker">DADOS DE HOJE</span>
+              <h2>Seu registro</h2>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <div class="form-section-head">
+              <div>
+                <span class="section-number">01</span>
+                <div><strong>Hidratação</strong><small>Quanto você bebeu hoje?</small></div>
+              </div>
+              <strong id="waterValue" class="section-value">0 L</strong>
+            </div>
+            <div class="input-with-unit">
+              <input id="waterInput" type="number" min="0" step="0.1" value="0" inputmode="decimal" aria-label="Quantidade de água em litros">
+              <span>litros</span>
+            </div>
+            <div class="quick-actions">
+              <button class="quick-btn water-add" type="button" data-ml="200">+200 ml</button>
+              <button class="quick-btn water-add" type="button" data-ml="300">+300 ml</button>
+              <button class="quick-btn water-add" type="button" data-ml="500">+500 ml</button>
+              <button class="quick-btn ghost" id="waterReset" type="button">Zerar</button>
+            </div>
+            <div class="progress-track"><span id="waterProgressBar"></span></div>
+            <p id="waterProgressText" class="progress-label">0 L de 2 L (0%)</p>
+          </div>
+
+          <div class="form-section">
+            <div class="form-section-head">
+              <div>
+                <span class="section-number">02</span>
+                <div><strong>Sono</strong><small>Duração e qualidade</small></div>
+              </div>
+            </div>
+            <div class="two-col">
+              <label>Horas dormidas
+                <input id="sleepHours" type="number" min="0" max="24" step="0.5" placeholder="8">
+              </label>
+              <label>Qualidade
+                <select id="sleepQuality">
+                  <option value="0">Não informado</option>
+                  <option value="1">1 — Muito ruim</option>
+                  <option value="2">2 — Ruim</option>
+                  <option value="3">3 — Regular</option>
+                  <option value="4">4 — Boa</option>
+                  <option value="5">5 — Excelente</option>
+                </select>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <div class="form-section-head">
+              <div>
+                <span class="section-number">03</span>
+                <div><strong>Atividade</strong><small>Movimento realizado hoje</small></div>
+              </div>
+            </div>
+            <div class="two-col">
+              <label>Minutos
+                <input id="activityMinutes" type="number" min="0" step="5" placeholder="30">
+              </label>
+              <label>Tipo
+                <select id="activityType">
+                  <option>Caminhada</option>
+                  <option>Corrida</option>
+                  <option>Academia</option>
+                  <option>Alongamento</option>
+                  <option>Esporte</option>
+                  <option>Bicicleta</option>
+                  <option>Outro</option>
+                </select>
+              </label>
+            </div>
+            <label class="full-label">Intensidade
+              <select id="activityIntensity">
+                <option>Leve</option>
+                <option selected>Moderada</option>
+                <option>Intensa</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="form-section">
+            <div class="form-section-head">
+              <div>
+                <span class="section-number">04</span>
+                <div><strong>Bem-estar</strong><small>Como você está se sentindo?</small></div>
+              </div>
+            </div>
+            <div class="choice-group">
+              <span class="choice-label">Humor</span>
+              <div id="moodChoices" class="choice-row">
+                <button type="button" data-mood="1">1</button>
+                <button type="button" data-mood="2">2</button>
+                <button type="button" data-mood="3">3</button>
+                <button type="button" data-mood="4">4</button>
+                <button type="button" data-mood="5">5</button>
+              </div>
+            </div>
+            <div class="choice-group">
+              <span class="choice-label">Energia</span>
+              <div id="energyChoices" class="choice-row">
+                <button type="button" data-energy="1">1</button>
+                <button type="button" data-energy="2">2</button>
+                <button type="button" data-energy="3">3</button>
+                <button type="button" data-energy="4">4</button>
+                <button type="button" data-energy="5">5</button>
+              </div>
+            </div>
+            <label class="full-label">Observação
+              <textarea id="dailyNotes" rows="3" placeholder="Como foi seu dia?"></textarea>
+            </label>
+          </div>
+
+          <button id="saveDayButton" class="btn btn-primary btn-wide" type="button">Salvar registro de hoje</button>
+        </article>
+
+        <aside class="calculator-side">
+          <article class="card live-card">
+            <span class="card-kicker">AO VIVO</span>
+            <h2>Seu resultado</h2>
+            <div class="score-ring compact" id="calculatorScoreRing" style="--progress: 0deg;">
+              <div class="score-ring-inner">
+                <strong id="calculatorScore">0%</strong>
+                <span>consistência</span>
+              </div>
+            </div>
+            <p id="calculatorMessage" class="muted center">Preencha seus dados para acompanhar o resultado.</p>
+            <div class="mini-stat-list">
+              <div><span>Água</span><strong id="calcWaterMini">0%</strong></div>
+              <div><span>Sono</span><strong id="calcSleepMini">0%</strong></div>
+              <div><span>Atividade</span><strong id="calcActivityMini">0%</strong></div>
+              <div><span>Hábitos</span><strong id="calcHabitMini">0%</strong></div>
+            </div>
+          </article>
+
+          <article class="card info-card">
+            <span class="card-kicker">DICA</span>
+            <h3>Pequenas ações contam</h3>
+            <p>Use os botões rápidos de água para adicionar 200, 300 ou 500 ml instantaneamente. O valor em litros e o progresso são atualizados na hora.</p>
+          </article>
+        </aside>
+      </div>
+    </section>
+
+    <!-- SOBRE -->
+    <section id="screen-about" class="screen">
+      <div class="page-head">
+        <div>
+          <p class="eyebrow">VITATRACK 2.0</p>
+          <h1>Sobre o sistema</h1>
+          <p class="muted">Uma central pessoal para acompanhar hábitos e consistência.</p>
+        </div>
+      </div>
+
+      <div class="about-grid">
+        <article class="card about-main">
+          <span class="card-kicker">COMO FUNCIONA</span>
+          <h2>Transforme registros em uma visão clara da sua rotina.</h2>
+          <p>O VitaTrack reúne hidratação, sono, atividade física, hábitos e percepção de bem-estar em um único painel. O objetivo é facilitar o acompanhamento da rotina, sem transformar os números em uma avaliação médica.</p>
+          <div class="feature-list">
+            <div><strong>01</strong><span><b>Registros rápidos</b><small>Atualize dados do dia em poucos toques.</small></span></div>
+            <div><strong>02</strong><span><b>Histórico</b><small>Veja como sua consistência muda ao longo do tempo.</small></span></div>
+            <div><strong>03</strong><span><b>Metas personalizadas</b><small>Defina objetivos de água, sono e atividade.</small></span></div>
+            <div><strong>04</strong><span><b>Conquistas</b><small>Reconheça marcos de consistência.</small></span></div>
+          </div>
+        </article>
+
+        <article class="card disclaimer-card">
+          <span class="card-kicker">IMPORTANTE</span>
+          <h2>Uso responsável</h2>
+          <p>O VitaTrack é uma ferramenta de organização e acompanhamento pessoal. Os indicadores são simplificados e não representam diagnóstico, avaliação médica ou prescrição.</p>
+          <p>Se você tiver dúvidas sobre saúde, alimentação, sono ou atividade física, procure orientação de um profissional qualificado.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- HÁBITOS -->
+    <section id="screen-habits" class="screen">
+      <div class="page-head">
+        <div>
+          <p class="eyebrow">FERRAMENTAS</p>
+          <h1>Hábitos</h1>
+          <p class="muted">Monte sua rotina diária e marque o que você concluiu.</p>
+        </div>
+        <button id="addHabitButton" class="btn btn-primary" type="button">+ Novo hábito</button>
+      </div>
+      <div class="card">
+        <div id="habitList" class="full-habit-list"></div>
+      </div>
+    </section>
+
+    <!-- ESTATÍSTICAS -->
+    <section id="screen-stats" class="screen">
+      <div class="page-head">
+        <div>
+          <p class="eyebrow">FERRAMENTAS</p>
+          <h1>Estatísticas</h1>
+          <p class="muted">Uma visão geral dos seus registros.</p>
+        </div>
+      </div>
+      <div class="stats-grid">
+        <article class="stat-box"><span>Dias registrados</span><strong id="statDays">0</strong></article>
+        <article class="stat-box"><span>Média de consistência</span><strong id="statConsistency">0%</strong></article>
+        <article class="stat-box"><span>Média de água</span><strong id="statWater">0 L</strong></article>
+        <article class="stat-box"><span>Média de sono</span><strong id="statSleep">0 h</strong></article>
+        <article class="stat-box"><span>Média de atividade</span><strong id="statActivity">0 min</strong></article>
+        <article class="stat-box"><span>Maior sequência</span><strong id="statStreak">0 dias</strong></article>
+      </div>
+      <article class="card large-chart-card">
+        <div class="card-title-row"><div><span class="card-kicker">ÚLTIMOS 7 DIAS</span><h2>Consistência diária</h2></div></div>
+        <div id="statsWeeklyChart" class="bar-chart tall"></div>
+      </article>
+    </section>
+
+    <!-- METAS -->
+    <section id="screen-goals" class="screen">
+      <div class="page-head">
+        <div>
+          <p class="eyebrow">FERRAMENTAS</p>
+          <h1>Metas</h1>
+          <p class="muted">Ajuste os objetivos usados nos seus indicadores.</p>
+        </div>
+      </div>
+      <article class="card goals-card">
+        <div class="goal-row">
+          <div><span class="goal-symbol">H₂O</span><div><strong>Hidratação</strong><small>Meta diária em litros</small></div></div>
+          <div class="goal-input"><input id="goalWater" type="number" min="0.1" step="0.1"><span>L</span></div>
+        </div>
+        <div class="goal-row">
+          <div><span class="goal-symbol">SONO</span><div><strong>Sono</strong><small>Meta de horas por noite</small></div></div>
+          <div class="goal-input"><input id="goalSleep" type="number" min="1" max="24" step="0.5"><span>h</span></div>
+        </div>
+        <div class="goal-row">
+          <div><span class="goal-symbol">ATV</span><div><strong>Atividade</strong><small>Meta diária de movimento</small></div></div>
+          <div class="goal-input"><input id="goalActivity" type="number" min="1" step="5"><span>min</span></div>
+        </div>
+        <button id="saveGoalsButton" class="btn btn-primary" type="button">Salvar metas</button>
+      </article>
+    </section>
+
+    <!-- HISTÓRICO -->
+    <section id="screen-history" class="screen">
+      <div class="page-head">
+        <div>
+          <p class="eyebrow">FERRAMENTAS</p>
+          <h1>Histórico</h1>
+          <p class="muted">Consulte seus últimos registros.</p>
+        </div>
+      </div>
+      <div class="history-layout">
+        <article class="card">
+          <div id="historyList" class="history-list"></div>
+        </article>
+        <article class="card history-detail">
+          <span class="card-kicker">DETALHES</span>
+          <h2 id="historyDetailTitle">Hoje</h2>
+          <div id="historyDetail" class="detail-grid"></div>
+        </article>
+      </div>
+    </section>
+
+    <!-- CONFIGURAÇÕES -->
+    <section id="screen-settings" class="screen">
+      <div class="page-head">
+        <div>
+          <p class="eyebrow">CONFIGURAÇÕES</p>
+          <h1>Preferências</h1>
+          <p class="muted">Personalize o VitaTrack.</p>
+        </div>
+      </div>
+
+      <div class="settings-grid">
+        <article class="card">
+          <div class="card-title-row"><div><span class="card-kicker">PERFIL</span><h2>Seus dados</h2></div></div>
+          <label class="full-label">Nome
+            <input id="profileName" type="text" maxlength="40" placeholder="Como quer ser chamado?">
+          </label>
+          <button id="saveProfileButton" class="btn btn-primary" type="button">Salvar perfil</button>
+        </article>
+
+        <article class="card">
+          <div class="card-title-row"><div><span class="card-kicker">APARÊNCIA</span><h2>Tema</h2></div></div>
+          <div class="setting-item">
+            <div><strong>Tema da interface</strong><span>Escolha entre claro e escuro.</span></div>
+            <select id="themeSelect">
+              <option value="dark">Escuro</option>
+              <option value="light">Claro</option>
+            </select>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-title-row"><div><span class="card-kicker">DADOS</span><h2>Backup</h2></div></div>
+          <p class="muted">Exporte uma cópia dos seus registros ou apague os dados salvos neste navegador.</p>
+          <div class="button-row">
+            <button id="exportButton" class="btn btn-secondary" type="button">Exportar dados</button>
+            <button id="resetAllButton" class="btn btn-danger" type="button">Apagar tudo</button>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-title-row"><div><span class="card-kicker">DIA ATUAL</span><h2>Recomeçar registro</h2></div></div>
+          <p class="muted">Apaga somente os dados registrados para hoje, mantendo suas metas e hábitos.</p>
+          <button id="resetDayButton" class="btn btn-secondary" type="button">Limpar registro de hoje</button>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>VitaTrack 2.0</span>
+    <span>Organização pessoal e acompanhamento de hábitos.</span>
+  </footer>
+
+  <div id="habitModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="habitModalTitle">
+    <div class="modal-backdrop" data-close-modal></div>
+    <div class="modal-panel">
+      <button class="modal-close" type="button" data-close-modal aria-label="Fechar">×</button>
+      <span class="card-kicker">NOVO HÁBITO</span>
+      <h2 id="habitModalTitle">Adicionar hábito</h2>
+      <label class="full-label">Nome
+        <input id="habitName" type="text" maxlength="50" placeholder="Ex.: Ler por 20 minutos">
+      </label>
+      <label class="full-label">Categoria
+        <select id="habitCategory">
+          <option>Rotina</option>
+          <option>Hidratação</option>
+          <option>Sono</option>
+          <option>Movimento</option>
+          <option>Estudos</option>
+          <option>Bem-estar</option>
+          <option>Outro</option>
+        </select>
+      </label>
+      <div class="button-row">
+        <button class="btn btn-secondary" type="button" data-close-modal>Cancelar</button>
+        <button id="confirmHabitButton" class="btn btn-primary" type="button">Adicionar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
